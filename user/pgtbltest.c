@@ -37,8 +37,9 @@ ugetpid_test()
     int ret = fork();
     if (ret != 0) {
       wait(&ret);
-      if (ret != 0)
+      if (ret != 0) {
         exit(1);
+      }
       continue;
     }
     if (getpid() != ugetpid())
