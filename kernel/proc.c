@@ -127,6 +127,7 @@ found:
     return 0;
   }
 
+  /******** part1 *******/ 
   // Allocate a usyscall page
   if((p->usyscall = (struct usyscall *)kalloc()) == 0){
     freeproc(p);
@@ -201,7 +202,6 @@ proc_pagetable(struct proc *p)
     uvmfree(pagetable, 0);
     return 0;
   }
-  printf("trampoline:%p\n", TRAMPOLINE);
   // map the trapframe just below TRAMPOLINE, for trampoline.S.
   if(mappages(pagetable, TRAPFRAME, PGSIZE,
               (uint64)(p->trapframe), PTE_R | PTE_W) < 0){
@@ -209,15 +209,13 @@ proc_pagetable(struct proc *p)
     uvmfree(pagetable, 0);
     return 0;
   }
-  printf("trapframe:%p\n", TRAPFRAME);
   if(mappages(pagetable, USYSCALL, PGSIZE,
-              (uint64)(p->usyscall), PTE_R) < 0){
+              (uint64)(p->usyscall), PTE_R | PTE_U) < 0){
     uvmunmap(pagetable, TRAMPOLINE, 1, 0);
     uvmunmap(pagetable, TRAPFRAME, 1, 0);
     uvmfree(pagetable, 0);
     return 0;
   }
-  printf("usyscall:%p\n", USYSCALL);
   return pagetable;
 }
 

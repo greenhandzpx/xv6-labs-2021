@@ -432,3 +432,36 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+
+/*** part 2 ***/
+// print a page table
+void
+recursive_print(pagetable_t pagetable, int level)
+{
+  for(int i = 0; i < 512; i++){
+    pte_t pte = pagetable[i];
+    if((pte & PTE_V) == 0) {
+      // invalid pte
+      continue;
+    }
+    for(int k = 0; k < level; k++){
+      printf(" ..");
+    }
+    printf("%d: pte %p pa %p\n", i, pte, PTE2PA(pte));
+    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){
+      // the pte is valid but no r/w/x permission, 
+      // so it must have a lower-level page
+      uint64 child = PTE2PA(pte);
+      recursive_print((pagetable_t)child, level+1);
+    }
+  }
+}
+
+void
+vmprint(pagetable_t pagetable) 
+{
+  printf("page table %p\n", pagetable);
+  recursive_print(pagetable, 1);
+
+}
