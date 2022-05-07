@@ -77,8 +77,49 @@ usertrap(void)
     exit(-1);
 
   // give up the CPU if this is a timer interrupt.
-  if(which_dev == 2)
+  if(which_dev == 2) {
+    p->ticks++;
     yield();
+
+    if (p->ticks && (p->ticks) % (p->alarm_interval) == 0 && !p->handling) {
+      p->save_reg.epc = p->trapframe->epc;  // quite important!!!
+      p->save_reg.a0 = p->trapframe->a0;
+      p->save_reg.a1 = p->trapframe->a1;
+      p->save_reg.a2 = p->trapframe->a2;
+      p->save_reg.a3 = p->trapframe->a3;
+      p->save_reg.a4 = p->trapframe->a4;
+      p->save_reg.a5 = p->trapframe->a5;
+      p->save_reg.a6 = p->trapframe->a6;
+      p->save_reg.a7 = p->trapframe->a7;
+      p->save_reg.t0 = p->trapframe->t0;
+      p->save_reg.t1 = p->trapframe->t1;
+      p->save_reg.t2 = p->trapframe->t2;
+      p->save_reg.t3 = p->trapframe->t3;
+      p->save_reg.t4 = p->trapframe->t4;
+      p->save_reg.t5 = p->trapframe->t5;
+      p->save_reg.t6 = p->trapframe->t6;
+      p->save_reg.tp = p->trapframe->tp;
+      p->save_reg.s0 = p->trapframe->s0;
+      p->save_reg.s1 = p->trapframe->s1;
+      p->save_reg.s2 = p->trapframe->s2;
+      p->save_reg.s3 = p->trapframe->s3;
+      p->save_reg.s4 = p->trapframe->s4;
+      p->save_reg.s5 = p->trapframe->s5;
+      p->save_reg.s6 = p->trapframe->s6;
+      p->save_reg.s7 = p->trapframe->s7;
+      p->save_reg.s8 = p->trapframe->s8;
+      p->save_reg.s9 = p->trapframe->s9;
+      p->save_reg.s10 = p->trapframe->s10;
+      p->save_reg.s11 = p->trapframe->s11;
+      p->save_reg.sp = p->trapframe->sp;
+      p->save_reg.ra = p->trapframe->ra;
+      p->save_reg.gp = p->trapframe->gp;
+
+      // printf("1a0:%p\n", p->save_reg.a0);
+      p->handling = 1;
+      p->trapframe->epc = p->handler;
+    }
+  }
 
   usertrapret();
 }
@@ -107,8 +148,8 @@ usertrapret(void)
   p->trapframe->kernel_hartid = r_tp();         // hartid for cpuid()
 
   // set up the registers that trampoline.S's sret will use
-  // to get to user space.
-  
+  // to get to user space.  
+
   // set S Previous Privilege mode to User.
   unsigned long x = r_sstatus();
   x &= ~SSTATUS_SPP; // clear SPP to 0 for user mode
