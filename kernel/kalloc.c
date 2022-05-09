@@ -25,11 +25,18 @@ struct {
 
 // count the reference of each physical page
 int reference_cnt[PHYSTOP / PGSIZE + 1];
+struct spinlock ref_lock;
 
 void
 kinit()
 {
   initlock(&kmem.lock, "kmem");
+  initlock(&ref_lock, "ref cnt");
+  acquire(&ref_lock);
+  for (int i = 0; i < PHYSTOP / PGSIZE + 1; i++) {
+    reference_cnt[i] = 0;
+  }
+  release(&ref_lock);
   freerange(end, (void*)PHYSTOP);
 }
 
@@ -50,11 +57,16 @@ void
 kfree(void *pa)
 {
   struct run *r;
+  acquire(&ref_lock);
+  reference_cnt[(uint64)pa/PGSIZE] -= 1;
   if (reference_cnt[(uint64)pa/PGSIZE] > 0) {
     // ref cnt > 0
+    // printf("cannot free %p\n", pa);
+    release(&ref_lock);
     return;
   }
-
+  release(&ref_lock);
+  // printf("free %p\n", pa);
   if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
     panic("kfree");
 
@@ -85,7 +97,9 @@ kalloc(void)
 
   if(r) {
     memset((char*)r, 5, PGSIZE); // fill with junk
+    acquire(&ref_lock);
     reference_cnt[(uint64)r / PGSIZE] = 1;  // init the ref cnt
+    release(&ref_lock);
   }
   return (void*)r;
 }

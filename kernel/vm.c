@@ -17,6 +17,8 @@ extern char trampoline[]; // trampoline.S
 
 extern int reference_cnt[]; // kalloc.c
 
+extern struct spinlock ref_lock;
+
 // Make a direct-map page table for the kernel.
 pagetable_t
 kvmmake(void)
@@ -180,13 +182,11 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
       panic("uvmunmap: not mapped");
     if(PTE_FLAGS(*pte) == PTE_V)
       panic("uvmunmap: not a leaf");
-    if(do_free){
-      uint64 pa = PTE2PA(*pte);
+    
 
+    uint64 pa = PTE2PA(*pte);
       /******** lab cow ********/
-      
-      reference_cnt[pa/PGSIZE] -= 1;
-
+    if(do_free){
       kfree((void*)pa);
     }
     *pte = 0;
@@ -313,8 +313,10 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   // char *mem;
 
   for(i = 0; i < sz; i += PGSIZE){
-    if((pte = walk(old, i, 0)) == 0)
+    if((pte = walk(old, i, 0)) == 0) {
+
       panic("uvmcopy: pte should exist");
+    }
     if((*pte & PTE_V) == 0)
       panic("uvmcopy: page not present");
     pa = PTE2PA(*pte);
@@ -329,14 +331,17 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
       printf("map error\n");  
       goto err;
     }
+    acquire(&ref_lock);
     reference_cnt[(uint64)pa/PGSIZE] += 1; // increment the ref cnt
+    release(&ref_lock);
 
     // clear the write flag of both parent and child
     // set the flag of cow
     *pte &= ~(PTE_W);
     *pte |= PTE_RSW;
     if ((pte = walk(new, i, 0)) == 0) {
-      panic("uvmcopy: new_pte should exist");
+      goto err;
+      // panic("uvmcopy: new_pte should exist");
     }
     *pte &= ~(PTE_W);
     *pte |= PTE_RSW;
@@ -380,6 +385,9 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
     if ((pte = walk(pagetable, va0, 0)) == 0) {
       return -1;
     } 
+    if ((*pte & PTE_V) == 0) {
+      return -1;
+    }
     if ((*pte & PTE_RSW) && !(*pte & PTE_W)) {
       // this is a cow page which doesn't have its own page yet
       pa0 = PTE2PA(*pte);

@@ -10,6 +10,7 @@ struct spinlock tickslock;
 uint ticks;
 
 extern int reference_cnt[]; // kalloc.c
+extern struct spinlock ref_lock;
 
 extern char trampoline[], uservec[], userret[];
 
@@ -83,12 +84,14 @@ usertrap(void)
       // the fault va is out of MAXVA, just ignore
       goto err;
     }
-    if ((pte = walk(p->pagetable, r_stval(), 0)) == 0)
-      panic("usertrap: pte should exist");
+    if ((pte = walk(p->pagetable, r_stval(), 0)) == 0) {
+      goto err;
+      // panic("usertrap: pte should exist");
+    }
     uint64 pa;
     uint flags;
     char* mem;
-    if (*pte & PTE_RSW) {
+    if (*pte & PTE_RSW && r_scause() == 0xf) {
       // a cow page
       // we should allocate a new page
       // printf("cow page\n");
