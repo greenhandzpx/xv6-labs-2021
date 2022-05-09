@@ -8,12 +8,10 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat May  7 19:17:16 2022
+# Make data base, printed on Mon May  9 08:30:43 2022
 
 # Variables
 
-# environment
-TMUX_PANE = %0
 # makefile (from 'Makefile', line 346)
 WEBSUB := https://6828.scripts.mit.edu/2021/handin.py
 # makefile (from 'Makefile', line 84)
@@ -27,7 +25,7 @@ QEMUGDB = $(shell if $(QEMU) -help | grep -q '^-gdb'; then echo "-gdb tcp::$(GDB
 # makefile (from 'Makefile', line 142)
 ULIB = $U/ulib.o $U/usys.o $U/printf.o $U/umalloc.o
 # environment
-WSLENV = ELECTRON_RUN_AS_NODE/w:WT_SESSION::WT_PROFILE_ID
+WSLENV = VSCODE_WSL_EXT_LOCATION/up
 # makefile (from 'Makefile', line 280)
 GDBPORT = $(shell expr `id -u` % 5000 + 25000)
 # environment
@@ -66,7 +64,6 @@ LANG = C
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/include /usr/local/include /usr/include
- 
 # makefile
 MAKEFLAGS = pqrR
 # makefile
@@ -74,11 +71,11 @@ CURDIR := /home/greenhandzpx/CodeField/xv6-labs-2021
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-host_ip = 172.28.176.1
+host_ip = 172.21.0.1
 # environment
 MFLAGS = -pqrR
 # default
@@ -99,17 +96,12 @@ CONDA_SHLVL = 0
 @F = $(notdir $@)
 # environment
 VSCODE_VERBOSE_LOGGING = true
-# environment
- 
-TMUX = /tmp/tmux-1000/default,19062,0
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
 CONDA_PYTHON_EXE = /opt/miniconda/bin/python
 # makefile (from 'Makefile', line 292)
 FWDPORT = $(shell expr `id -u` % 5000 + 25999)
-# environment
-WT_PROFILE_ID = {8bf2d7ce-4310-535d-8cfe-1fe3b5f5a5b1}
 # makefile (from 'Makefile', line 92)
 LABUPPER = $(shell echo $(LAB) | tr a-z A-Z)
 # automatic
@@ -117,9 +109,6 @@ LABUPPER = $(shell echo $(LAB) | tr a-z A-Z)
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
 # environment
-P9K_TTY = old
-# environment
- 
 VSCODE_NLS_CONFIG = {"locale":"en","availableLanguages":{}}
 # default
 MAKE_HOST := x86_64-pc-linux-gnu
@@ -132,7 +121,7 @@ SHELL = /bin/sh
 # default
 MAKECMDGOALS := all
 # environment
-SHLVL = 4
+SHLVL = 2
 # environment
 MAKELEVEL := 0
 # makefile (from 'Makefile', line 87)
@@ -142,7 +131,7 @@ MAKE = $(MAKE_COMMAND)
 # makefile (from 'Makefile', line 203)
 UPROGS = $U/_cat $U/_echo $U/_forktest $U/_grep $U/_init $U/_kill $U/_ln $U/_ls $U/_mkdir $U/_rm $U/_sh $U/_stressfs $U/_usertests $U/_grind $U/_wc $U/_zombie $U/_call $U/_bttest $U/_alarmtest $U/_call $U/_bttest
 # environment
-PATH = /home/greenhandzpx/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/remote-cli:/opt/miniconda/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/libnvvp:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/g/nodejs/:/mnt/g/new_python/Lib/site-packages/ffmpeg:/mnt/g/xshell/:/mnt/g/xftp/:/mnt/c/Program Files/MySQL/MySQL Server 8.0/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/g/Qt/6.0.4/mingw81_64/bin:/mnt/g/new_python/Scripts:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2019.5.0/:/mnt/g/git/Git/cmd:/mnt/e/python/Scripts/:/mnt/e/python/:/mnt/c/Users/86135/AppData/Local/Programs/Python/Python38/Scripts/:/mnt/c/Users/86135/AppData/Local/Programs/Python/Python38/:/mnt/c/Program Files/MySQL/MySQL Shell 8.0/bin/:/mnt/g/new_python/Scripts/:/mnt/g/new_python/:/mnt/c/Users/86135/AppData/Local/Microsoft/WindowsApps:/mnt/g/vscode/Microsoft VS Code/bin:/mnt/g/mingw64/bin:/mnt/c/Users/86135/AppData/Roaming/npm:/mnt/g/ffmpeg-N-102809-gde8e6e67e7-win64-gpl/bin:/mnt/e/downloadFromBrowser/cmake-3.21.1-windows-x86_64/bin:/mnt/g/clion/CLion 2021.3.3/bin:/mnt/g/idea/IntelliJ IDEA 2021.3.2/bin:/mnt/g/git/Git/bin:/mnt/g/vscode/Microsoft VS Code/bin:/mnt/c/Users/86135/Documents/WindowsPowerShell/Modules/oh-my-posh/7.31.1:/mnt/c/java/jdk-17.0.2/bin:/mnt/g/pycharm/PyCharm 2021.3.2/bin:/mnt/g/ngrok/ngrok-stable-windows-amd64:/mnt/g/goland/GoLand 2021.3.4/bin:/mnt/g/neovim/nvim-win64/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/greenhandzpx/Downloads/riscv-pk/build/dist/riscv64-linux-gnu/bin:/usr/lib/jvm/default/bin:/home/greenhandzpx/Downloads/riscv-pk/build/dist/riscv64-linux-gnu/bin
+PATH = /home/greenhandzpx/.vscode-server/bin/57fd6d0195bb9b9d1b49f6da5db789060795de47/bin/remote-cli:/opt/miniconda/condabin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/bin:/mnt/c/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v10.2/libnvvp:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0/:/mnt/c/Windows/System32/OpenSSH/:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/g/nodejs/:/mnt/g/new_python/Lib/site-packages/ffmpeg:/mnt/g/xshell/:/mnt/g/xftp/:/mnt/c/Program Files/MySQL/MySQL Server 8.0/bin:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/g/Qt/6.0.4/mingw81_64/bin:/mnt/g/new_python/Scripts:/mnt/c/Program Files/Docker/Docker/resources/bin:/mnt/c/ProgramData/DockerDesktop/version-bin:/mnt/c/Program Files/NVIDIA Corporation/Nsight Compute 2019.5.0/:/mnt/g/git/Git/cmd:/mnt/e/python/Scripts/:/mnt/e/python/:/mnt/c/Users/86135/AppData/Local/Programs/Python/Python38/Scripts/:/mnt/c/Users/86135/AppData/Local/Programs/Python/Python38/:/mnt/c/Program Files/MySQL/MySQL Shell 8.0/bin/:/mnt/g/new_python/Scripts/:/mnt/g/new_python/:/mnt/c/Users/86135/AppData/Local/Microsoft/WindowsApps:/mnt/g/vscode/Microsoft VS Code/bin:/mnt/g/mingw64/bin:/mnt/c/Users/86135/AppData/Roaming/npm:/mnt/c/Program Files/MySQL/MySQL Server 8.0/bin:/mnt/g/Qt/6.0.4/mingw81_64/bin:/mnt/g/ffmpeg-N-102809-gde8e6e67e7-win64-gpl/bin:/mnt/e/downloadFromBrowser/cmake-3.21.1-windows-x86_64/bin:/mnt/g/clion/CLion 2021.3.3/bin:/mnt/g/idea/IntelliJ IDEA 2021.3.2/bin:/mnt/g/git/Git/bin:/mnt/g/vscode/Microsoft VS Code/bin:/mnt/c/Users/86135/Documents/WindowsPowerShell/Modules/oh-my-posh/7.31.1:/mnt/c/java/jdk-17.0.2/bin:/mnt/g/pycharm/PyCharm 2021.3.2/bin:/mnt/g/ngrok/ngrok-stable-windows-amd64:/mnt/g/goland/GoLand 2021.3.4/bin:/mnt/g/neovim/nvim-win64/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/greenhandzpx/Downloads/riscv-pk/build/dist/riscv64-linux-gnu/bin
 # default
 MAKEFILES := 
 # automatic
@@ -150,21 +139,17 @@ MAKEFILES :=
 # makefile (from 'Makefile', line 35)
 OBJS_KCSAN = $K/start.o $K/console.o $K/printf.o $K/uart.o $K/spinlock.o
 # environment
-WT_SESSION = a1e95676-baef-4814-a869-be8d3e52c4d6
-# environment
 VSCODE_LOG_NATIVE = false
-# environment
-TERM_PROGRAM = tmux
 # automatic
 ?F = $(notdir $?)
 # environment
-NAME = Code
+NAME = greeeenhandzpx
 # environment
 HOSTTYPE = x86_64
 # automatic
 +F = $(notdir $+)
 # environment
-WSL_INTEROP = /run/WSL/13_interop
+WSL_INTEROP = /run/WSL/38_interop
 # 'override' directive
 GNUMAKEFLAGS := 
 # environment
@@ -177,7 +162,6 @@ VSCODE_WSL_EXT_LOCATION = /mnt/c/Users/86135/.vscode/extensions/ms-vscode-remote
 QEMU = qemu-system-riscv64
 # environment
 USER = greenhandzpx
- 
 # default
 MAKE_VERSION := 4.3
 # 'override' directive
@@ -193,7 +177,7 @@ CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb $(XCFLAGS) -MD -mcmodel=
 # environment
 _CE_M = 
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-692d0c31-6093-458d-9f8b-57322affdf5a.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-d734f8a8-fab0-40b2-9954-5d9d55b62669.sock
 # makefile (from 'Makefile', line 286)
 CPUS := 3
 # environment
@@ -205,7 +189,7 @@ TOOLPREFIX := riscv64-linux-gnu-
 # makefile (from 'Makefile', line 329)
 GRADEFLAGS = -v
 # environment
-TERM = screen
+TERM = xterm-256color
 # environment
 GOPROXY = https://goproxy.cn,direct
 # default
@@ -216,8 +200,6 @@ GOPROXY = https://goproxy.cn,direct
 SUFFIXES := 
 # makefile (from 'Makefile', line 85)
 LD = $(TOOLPREFIX)ld
-# environment
-_P9K_TTY = /dev/pts/0
 # environment
 WSL_DISTRO_NAME = ArchLinux
 # default
@@ -231,13 +213,11 @@ CC = $(TOOLPREFIX)gcc
 # makefile (from 'Makefile', line 86)
 OBJCOPY = $(TOOLPREFIX)objcopy
 # environment
-TERM_PROGRAM_VERSION = 3.2a
-# environment
 CONDA_EXE = /opt/miniconda/bin/conda
 # environment
 _CE_CONDA = 
 # variable set hash-table stats:
-# Load=110/1024=11%, Rehash=0, Collisions=2/474=0%
+# Load=102/1024=10%, Rehash=0, Collisions=2/466=0%
 
 # Pattern-specific Variable Values
 
@@ -294,6 +274,7 @@ user/call.d:
 # Not a target:
 user/grind.d:
 #  Implicit rule search has been done.
+ 
 #  Last modified 2022-05-07 10:24:11.698966465
 #  File has been updated.
 #  Successfully updated.
@@ -438,7 +419,6 @@ user/forktest.c:
 user/ln.d:
 #  Implicit rule search has been done.
 #  Last modified 2022-05-07 10:24:10.938966461
- 
 #  File has been updated.
 #  Successfully updated.
 
@@ -460,7 +440,7 @@ kernel/sysfile.o: kernel/sysfile.c kernel/types.h kernel/riscv.h kernel/defs.h k
 # Not a target:
 kernel/exec.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.88898521
+#  Last modified 2022-05-07 20:47:45.722723888
 #  File has been updated.
 #  Successfully updated.
 
@@ -571,6 +551,7 @@ user/usys.S: user/usys.pl
 #  recipe to execute (from 'Makefile', line 154):
 	perl $U/usys.pl > $U/usys.S
 
+ 
 # Not a target:
 user/_grep:
 #  Implicit rule search has not been done.
@@ -608,7 +589,7 @@ kernel/vm.o: kernel/vm.c kernel/param.h kernel/types.h kernel/memlayout.h kernel
 # Not a target:
 kernel/sleeplock.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.718985209
+#  Last modified 2022-05-07 20:47:45.582723884
 #  File has been updated.
 #  Successfully updated.
 
@@ -641,7 +622,7 @@ kernel/exec.c:
 # Not a target:
 kernel/printf.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:56.048985211
+#  Last modified 2022-05-07 20:47:45.892723893
 #  File has been updated.
 #  Successfully updated.
 
@@ -667,7 +648,7 @@ kernel/plic.c:
 # Not a target:
 kernel/proc.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.428985208
+#  Last modified 2022-05-07 20:47:45.322723877
 #  File has been updated.
 #  Successfully updated.
 
@@ -734,7 +715,6 @@ clean:
 	$(UPROGS) \
 	ph barrier
 
- 
 # Not a target:
 kernel/log.c:
 #  Implicit rule search has not been done.
@@ -765,8 +745,9 @@ user/rm.c:
 
 # Not a target:
 kernel/uart.d:
+ 
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:56.098985212
+#  Last modified 2022-05-07 20:47:45.932723894
 #  File has been updated.
 #  Successfully updated.
 
@@ -940,7 +921,7 @@ kernel/pipe.c:
 # Not a target:
 kernel/sysproc.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.558985209
+#  Last modified 2022-05-07 20:47:45.45272388
 #  File has been updated.
 #  Successfully updated.
 
@@ -1058,7 +1039,7 @@ kernel/bio.c:
 # Not a target:
 kernel/fs.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.678985209
+#  Last modified 2022-05-07 20:47:45.542723883
 #  File has been updated.
 #  Successfully updated.
 
@@ -1153,7 +1134,7 @@ kernel/vm.c:
 # Not a target:
 kernel/trap.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:39:42.228991413
+#  Last modified 2022-05-07 20:47:45.372723878
 #  File has been updated.
 #  Successfully updated.
 
@@ -1198,7 +1179,7 @@ user/zombie.d:
 # Not a target:
 kernel/pipe.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.82898521
+#  Last modified 2022-05-07 20:47:45.672723887
 #  File has been updated.
 #  Successfully updated.
 
@@ -1211,15 +1192,15 @@ kernel/fs.c:
 # Not a target:
 kernel/file.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.77898521
+#  Last modified 2022-05-07 20:47:45.632723886
 #  File has been updated.
 #  Successfully updated.
 
- 
 # Not a target:
 user/initcode.S:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
 # Not a target:
@@ -1339,7 +1320,7 @@ mkfs/mkfs.c:
 # Not a target:
 kernel/spinlock.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:56.138985212
+#  Last modified 2022-05-07 20:47:45.962723895
 #  File has been updated.
 #  Successfully updated.
 
@@ -1428,8 +1409,7 @@ user/_rm:
 # Not a target:
 kernel/sysfile.d:
 #  Implicit rule search has been done.
- 
-#  Last modified 2022-05-07 11:20:55.958985211
+#  Last modified 2022-05-07 20:47:45.80272389
 #  File has been updated.
 #  Successfully updated.
 
@@ -1454,7 +1434,7 @@ user/_sh:
 # Not a target:
 kernel/syscall.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:55.518985208
+#  Last modified 2022-05-07 20:47:45.402723879
 #  File has been updated.
 #  Successfully updated.
 
@@ -1503,6 +1483,7 @@ kernel/elf.h:
 user/kill.c:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
+ 
 #  File has not been updated.
 
 # Not a target:
@@ -1604,7 +1585,7 @@ user/mkdir.d:
 # Not a target:
 kernel/console.d:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-07 11:20:56.008985211
+#  Last modified 2022-05-07 20:47:45.852723892
 #  File has been updated.
 #  Successfully updated.
 
@@ -1712,7 +1693,6 @@ user/alarmtest.o: user/alarmtest.c kernel/param.h kernel/types.h kernel/stat.h k
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
- 
 
 # Not a target:
 user/wc.d:
@@ -1756,6 +1736,6 @@ kernel/file.o: kernel/file.c kernel/types.h kernel/riscv.h kernel/defs.h kernel/
 # strcache performance: lookups = 973 / hit rate = 51%
 # hash-table stats:
 # Load=475/8192=6%, Rehash=0, Collisions=23/973=2%
-# Finished Make data base on Sat May  7 19:17:16 2022
+# Finished Make data base on Mon May  9 08:30:43 2022
 
  
