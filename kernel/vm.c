@@ -15,6 +15,8 @@ extern char etext[];  // kernel.ld sets this to end of kernel code.
 
 extern char trampoline[]; // trampoline.S
 
+extern int reference_cnt[]; // kalloc.c
+
 // Make a direct-map page table for the kernel.
 pagetable_t
 kvmmake(void)
@@ -180,6 +182,11 @@ uvmunmap(pagetable_t pagetable, uint64 va, uint64 npages, int do_free)
       panic("uvmunmap: not a leaf");
     if(do_free){
       uint64 pa = PTE2PA(*pte);
+
+      /******** lab cow ********/
+      
+      reference_cnt[pa/PGSIZE] -= 1;
+
       kfree((void*)pa);
     }
     *pte = 0;
@@ -303,7 +310,7 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   pte_t *pte;
   uint64 pa, i;
   uint flags;
-  char *mem;
+  // char *mem;
 
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
@@ -312,13 +319,27 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
       panic("uvmcopy: page not present");
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
-    if((mem = kalloc()) == 0)
-      goto err;
-    memmove(mem, (char*)pa, PGSIZE);
-    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
-      kfree(mem);
+    /********** lab cow ************/
+    // Don't alloc memory when the child is created.
+    // if((mem = kalloc()) == 0)
+    //   goto err;
+    // memmove(mem, (char*)pa, PGSIZE);
+    if(mappages(new, i, PGSIZE, (uint64)pa, flags) != 0){
+      // kfree(mem);
+      printf("map error\n");  
       goto err;
     }
+    reference_cnt[(uint64)pa/PGSIZE] += 1; // increment the ref cnt
+
+    // clear the write flag of both parent and child
+    // set the flag of cow
+    *pte &= ~(PTE_W);
+    *pte |= PTE_RSW;
+    if ((pte = walk(new, i, 0)) == 0) {
+      panic("uvmcopy: new_pte should exist");
+    }
+    *pte &= ~(PTE_W);
+    *pte |= PTE_RSW;
   }
   return 0;
 
@@ -347,9 +368,37 @@ int
 copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 {
   uint64 n, va0, pa0;
-
+  int flags;
+  pte_t* pte;
+  char* mem;
   while(len > 0){
+    if (dstva >= MAXVA) {
+      return -1;
+    }
     va0 = PGROUNDDOWN(dstva);
+    // check whether this is a cow page
+    if ((pte = walk(pagetable, va0, 0)) == 0) {
+      return -1;
+    } 
+    if ((*pte & PTE_RSW) && !(*pte & PTE_W)) {
+      // this is a cow page which doesn't have its own page yet
+      pa0 = PTE2PA(*pte);
+      *pte |= PTE_W;
+      *pte &= ~PTE_RSW;
+      flags = PTE_FLAGS(*pte);
+      if ((mem = kalloc()) == 0) {
+        printf("no enough mem for cow\n"); 
+        return -1;
+      }
+      memmove(mem, (char*)pa0, PGSIZE);
+      uvmunmap(pagetable, va0, 1, 1);
+      if (mappages(pagetable, va0, PGSIZE, (uint64)mem, flags)
+           != 0) {
+        printf("map error\n");  
+        return -1;
+      }
+    }
+
     pa0 = walkaddr(pagetable, va0);
     if(pa0 == 0)
       return -1;

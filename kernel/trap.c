@@ -9,6 +9,8 @@
 struct spinlock tickslock;
 uint ticks;
 
+extern int reference_cnt[]; // kalloc.c
+
 extern char trampoline[], uservec[], userret[];
 
 // in kernelvec.S, calls kerneltrap().
@@ -46,10 +48,17 @@ usertrap(void)
   w_stvec((uint64)kernelvec);
 
   struct proc *p = myproc();
-  
+
+  // // TODO
+  // pte_t* pte;
+  // for (int i = 0; i < p->sz; i += PGSIZE) {
+  //     if((pte = walk(p->pagetable, i, 0)) == 0)
+  //       panic("usertrap: pte should exist");
+  // } 
+
   // save user program counter.
   p->trapframe->epc = r_sepc();
-  
+
   if(r_scause() == 8){
     // system call
 
@@ -68,6 +77,39 @@ usertrap(void)
   } else if((which_dev = devintr()) != 0){
     // ok
   } else {
+    // page fault
+    pte_t* pte;
+    if (r_stval() >= MAXVA) {
+      // the fault va is out of MAXVA, just ignore
+      goto err;
+    }
+    if ((pte = walk(p->pagetable, r_stval(), 0)) == 0)
+      panic("usertrap: pte should exist");
+    uint64 pa;
+    uint flags;
+    char* mem;
+    if (*pte & PTE_RSW) {
+      // a cow page
+      // we should allocate a new page
+      // printf("cow page\n");
+      pa = PTE2PA(*pte);
+      *pte |= PTE_W;
+      *pte &= ~PTE_RSW;
+      flags = PTE_FLAGS(*pte);
+      if ((mem = kalloc()) == 0) {
+        printf("no enough mem for cow\n"); 
+        goto err;
+      }
+      memmove(mem, (char*)pa, PGSIZE);
+      uvmunmap(p->pagetable, PGROUNDDOWN(r_stval()), 1, 1);
+      if (mappages(p->pagetable, PGROUNDDOWN(r_stval()), PGSIZE, (uint64)mem, flags)
+           != 0) {
+        printf("map error\n");  
+        goto err;
+      }
+      goto normal; 
+    }
+err:
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
     p->killed = 1;
@@ -80,6 +122,7 @@ usertrap(void)
   if(which_dev == 2)
     yield();
 
+normal:
   usertrapret();
 }
 
