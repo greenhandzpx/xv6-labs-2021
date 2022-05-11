@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue May 10 09:49:36 2022
+# Make data base, printed on Tue May 10 22:58:26 2022
 
 # Variables
 
@@ -71,11 +71,11 @@ CURDIR := /home/greenhandzpx/CodeField/xv6-labs-2021
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-host_ip = 172.18.80.1
+host_ip = 172.27.64.1
 # environment
 MFLAGS = -pqrR
 # default
@@ -177,7 +177,7 @@ CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb $(XCFLAGS) -MD -mcmodel=
 # environment
 _CE_M = 
 # environment
-VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-39d8f704-9fa0-46d1-902c-a52831043304.sock
+VSCODE_IPC_HOOK_CLI = /tmp/vscode-ipc-cc438299-d693-4bb1-930e-d03c2b64a74e.sock
 # makefile (from 'Makefile', line 286)
 CPUS := 3
 # environment
@@ -551,12 +551,12 @@ user/usys.S: user/usys.pl
 #  recipe to execute (from 'Makefile', line 154):
 	perl $U/usys.pl > $U/usys.S
 
- 
 # Not a target:
 user/_grep:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 
 user/sh.o: user/sh.c kernel/types.h user/user.h kernel/fcntl.h
 #  Implicit rule search has not been done.
@@ -573,7 +573,7 @@ user/ls.d:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-09 15:26:48.476446371
+#  Last modified 2022-05-10 09:52:53.181079335
 #  File has been updated.
 #  Successfully updated.
 
@@ -821,7 +821,6 @@ kernel/fs.o: kernel/fs.c kernel/types.h kernel/riscv.h kernel/defs.h kernel/para
 # variable set hash-table stats:
 # Load=1/32=3%, Rehash=0, Collisions=0/3=0%
 
- 
 mkfs/mkfs: mkfs/mkfs.c kernel/fs.h kernel/param.h
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -856,6 +855,7 @@ kernel/virtio_disk.o: kernel/virtio_disk.c kernel/types.h kernel/riscv.h kernel/
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 # variable set hash-table stats:
 # Load=1/32=3%, Rehash=0, Collisions=0/3=0%
 
@@ -1117,6 +1117,7 @@ user/forktest.o: user/forktest.c kernel/types.h kernel/stat.h user/user.h
 #  File has not been updated.
 
 # Not a target:
+ 
 user/cat.d:
 #  Implicit rule search has been done.
 #  Last modified 2022-05-09 15:28:37.126448207
@@ -1220,7 +1221,6 @@ user/zombie.c:
 #  File has not been updated.
 
 user/ulib.o: user/ulib.c kernel/types.h kernel/stat.h kernel/fcntl.h user/user.h
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -1317,6 +1317,7 @@ kernel/sleeplock.o: kernel/sleeplock.c kernel/types.h kernel/riscv.h kernel/defs
 # Load=1/32=3%, Rehash=0, Collisions=0/3=0%
 
 # Not a target:
+ 
 mkfs/mkfs.c:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -1426,7 +1427,7 @@ user/call.o: user/call.c kernel/param.h kernel/types.h kernel/stat.h user/user.h
 # Not a target:
 conf/lab.mk:
 #  Implicit rule search has been done.
-#  Last modified 2022-05-09 08:49:50.346043923
+#  Last modified 2022-05-10 09:52:53.181079335
 #  File has been updated.
 #  Successfully updated.
 
@@ -1524,6 +1525,7 @@ user/user.h:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 
 # Not a target:
 user/_ln:
@@ -1534,7 +1536,6 @@ user/_ln:
 # Not a target:
 user/cowtest.c:
 #  Implicit rule search has not been done.
- 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -1690,7 +1691,6 @@ kernel/sysproc.c:
 # Not a target:
 kernel/main.d:
 #  Implicit rule search has been done.
- 
 #  Last modified 2022-05-09 16:13:21.466493564
 #  File has been updated.
 #  Successfully updated.
@@ -1742,6 +1742,6 @@ kernel/file.o: kernel/file.c kernel/types.h kernel/riscv.h kernel/defs.h kernel/
 # strcache performance: lookups = 982 / hit rate = 51%
 # hash-table stats:
 # Load=479/8192=6%, Rehash=0, Collisions=23/982=2%
-# Finished Make data base on Tue May 10 09:49:36 2022
+# Finished Make data base on Tue May 10 22:58:26 2022
 
  
