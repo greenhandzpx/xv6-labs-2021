@@ -102,7 +102,19 @@ e1000_transmit(struct mbuf *m)
   // the TX descriptor ring so that the e1000 sends it. Stash
   // a pointer so that it can be freed after sending.
   //
-  
+  int tail = regs[E1000_TDT];
+  if (tx_ring[tail].status != E1000_TXD_STAT_DD) {
+    return -1;
+  }
+  // find the start pa of the page(not sure)
+  uint64 addr = PTE2PA(PA2PTE(tx_ring[tail].addr));
+  if (addr) {
+    mbuffree((struct mbuf*)addr);
+  }
+  tx_ring[tail].addr = (uint64)(m->head);
+  tx_ring[tail].length = m->len;
+  tx_ring[tail].status = E1000_TXD_CMD_RS;
+  regs[E1000_TDT] = (regs[E1000_TDT] + 1) % TX_RING_SIZE;
   return 0;
 }
 
@@ -115,6 +127,20 @@ e1000_recv(void)
   // Check for packets that have arrived from the e1000
   // Create and deliver an mbuf for each packet (using net_rx()).
   //
+  int tail = (regs[E1000_RDT] + 1) % RX_RING_SIZE;
+  if (rx_ring[tail].status != E1000_RXD_STAT_DD) {
+    return;
+  }
+  struct mbuf* m = (struct mbuf*)rx_ring[tail].addr;
+  m->len = rx_ring[tail].length;
+  net_rx(m);
+
+  // not sure how large room should be passed to the function  
+  m = mbufalloc(0);
+  rx_ring[tail].addr = (uint64)m->head;
+  rx_ring[tail].status = 0;
+
+  regs[E1000_RDT] = (regs[E1000_RDT] + 1) % RX_RING_SIZE;
 }
 
 void
