@@ -1775,11 +1775,12 @@ manywrites(char *s)
 
     if(pid == 0){
       char name[3];
+
       name[0] = 'b';
       name[1] = 'a' + ci;
       name[2] = '\0';
       unlink(name);
-      
+
       for(int iters = 0; iters < howmany; iters++){
         for(int i = 0; i < ci+1; i++){
           int fd = open(name, O_CREATE | O_RDWR);

@@ -97,6 +97,9 @@ test0()
   for(int i = 0; i < NCHILD; i++){
     dir[0] = '0' + i;
     mkdir(dir);
+    // if (mkdir(dir) < 0) {
+    //   printf("mkdir failed\n");
+    // }
     if (chdir(dir) < 0) {
       printf("chdir failed\n");
       exit(1);
