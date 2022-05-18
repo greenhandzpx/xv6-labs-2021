@@ -400,6 +400,36 @@ bmap(struct inode *ip, uint bn)
     brelse(bp);
     return addr;
   }
+  // lab fs part1
+  bn -= NINDIRECT;
+
+  if (bn < NDINDIRECT) {
+    // Load double-indirect block
+    if ((addr = ip->addrs[NDIRECT+1]) == 0)
+      ip->addrs[NDIRECT+1] = addr = balloc(ip->dev);
+    bp = bread(ip->dev, addr);
+    // a is the array of all the single-indirect blocks
+    a = (uint*)bp->data;
+    // get the index of the single-indirect block
+    int in_index = bn / NINDIRECT;
+    if ((addr = a[in_index]) == 0) {
+      a[in_index] = addr = balloc(ip->dev);
+      log_write(bp);
+    }
+    brelse(bp);
+    // visit the single-indirect block
+    bp = bread(ip->dev, addr);
+    // a is the array of all the direct blocks
+    a = (uint*)bp->data;
+    // get the index of the direct block
+    int dir_index = bn % NINDIRECT;
+    if ((addr = a[dir_index]) == 0) {
+      a[dir_index] = addr = balloc(ip->dev);
+      log_write(bp);
+    }
+    brelse(bp);
+    return addr;
+  }
 
   panic("bmap: out of range");
 }
@@ -429,6 +459,26 @@ itrunc(struct inode *ip)
     }
     brelse(bp);
     bfree(ip->dev, ip->addrs[NDIRECT]);
+    ip->addrs[NDIRECT] = 0;
+  }
+
+  // lab fs par1
+  struct buf *bp2;
+  uint* a2;
+  if(ip->addrs[NDIRECT+1]){
+    bp = bread(ip->dev, ip->addrs[NDIRECT+1]);
+    a = (uint*)bp->data;
+    for(j = 0; j < NINDIRECT; j++){
+      bp2 = bread(ip->dev, a[j]);
+      a2 = (uint*)bp2->data;
+      for(i = 0; i < NINDIRECT; i++){
+        if(a2[i])
+          bfree(ip->dev, a2[i]);
+      }
+      brelse(bp2);
+    }
+    brelse(bp);
+    bfree(ip->dev, ip->addrs[NDIRECT+1]);
     ip->addrs[NDIRECT] = 0;
   }
 
