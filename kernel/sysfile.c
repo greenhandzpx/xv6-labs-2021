@@ -291,7 +291,7 @@ sys_open(void)
   struct file *f;
   struct inode *ip;
   int n;
-
+  int depth = 0;  // count the depth of the symlink
   if((n = argstr(0, path, MAXPATH)) < 0 || argint(1, &omode) < 0)
     return -1;
 
@@ -304,6 +304,7 @@ sys_open(void)
       return -1;
     }
   } else {
+repeat:
     if((ip = namei(path)) == 0){
       end_op();
       return -1;
@@ -313,6 +314,21 @@ sys_open(void)
       iunlockput(ip);
       end_op();
       return -1;
+    }
+    // lab fs part2
+    if (ip->type == T_SYMLINK && !(omode & O_NOFOLLOW)) {
+      if (depth >= 10) {
+        iunlockput(ip);
+        end_op();
+        return -1;
+      }
+      // printf("symlink1: %s\n", path);
+      // we should recursively read the symlink
+      readi(ip, 0, (uint64)path, 0, MAXPATH); 
+      // printf("symlink2: %s\n", path);
+      iunlockput(ip);
+      depth += 1;
+      goto repeat;
     }
   }
 
@@ -483,4 +499,41 @@ sys_pipe(void)
     return -1;
   }
   return 0;
+}
+
+// lab fs part2
+uint64
+sys_symlink(void)
+{
+  // char name[DIRSIZ];
+  char new[MAXPATH], old[MAXPATH];
+  struct inode *ip;
+
+  if(argstr(0, old, MAXPATH) < 0 || argstr(1, new, MAXPATH) < 0)
+    return -1;
+
+  begin_op();
+  // create an empty file 
+  if((ip = create(new, T_SYMLINK, 0, 0)) == 0) {
+    goto bad;
+  }
+  // }
+  // write the target to the sym file
+  // ilock(ip);
+  if (writei(ip, 0, (uint64)old, 0, MAXPATH) < 0) {
+    panic("symlink: writei");
+  }
+  // printf("old:%s\n", old);
+  iunlockput(ip);
+
+  end_op();
+  return 0;
+
+bad:
+  // ilock(ip);
+  // ip->nlink--;
+  // iupdate(ip);
+  // iunlockput(ip);
+  end_op();
+  return -1;
 }
