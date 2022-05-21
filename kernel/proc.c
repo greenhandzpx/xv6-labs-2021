@@ -141,6 +141,10 @@ found:
   p->context.ra = (uint64)forkret;
   p->context.sp = p->kstack + PGSIZE;
 
+
+  // lab mmap
+  p->mmap_cnt = 0;
+  
   return p;
 }
 
@@ -603,6 +607,8 @@ int
 either_copyout(int user_dst, uint64 dst, void *src, uint64 len)
 {
   struct proc *p = myproc();
+  // printf("p->sz: %p\n", p->sz);
+  // printf("src:%s\n", (char*)src);
   if(user_dst){
     return copyout(p->pagetable, dst, src, len);
   } else {

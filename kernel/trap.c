@@ -5,6 +5,11 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+// lab mmap
+#include "fcntl.h"
+#include "sleeplock.h"
+#include "fs.h"
+#include "file.h"
 
 struct spinlock tickslock;
 uint ticks;
@@ -46,7 +51,7 @@ usertrap(void)
   w_stvec((uint64)kernelvec);
 
   struct proc *p = myproc();
-  
+ 
   // save user program counter.
   p->trapframe->epc = r_sepc();
   
@@ -67,6 +72,45 @@ usertrap(void)
     syscall();
   } else if((which_dev = devintr()) != 0){
     // ok
+  } else if (r_scause() == 13 || r_scause() == 15) {
+    // lab mmap
+
+    // lazy allocation for mmap
+    printf("lazy mmap\n");
+    struct proc* p = myproc();
+    uint64 fault_addr = r_stval();
+    char* mem;
+    // check whether this is a mmap page fault
+    for (int i = 0; i < MMAP_SIZE; i++) {
+      uint64 start_addr = p->vma_for_mmap[i].start_addr;
+      uint64 end_addr = p->vma_for_mmap[i].end_addr;
+      if (start_addr <= fault_addr && fault_addr <= end_addr) {
+        // the fault addr is between the lower bound and the upper bound
+        int off = (int)(fault_addr - start_addr) - p->vma_for_mmap[i].off;
+        // get the permisson(not sure)
+        int perm = PTE_U | PTE_X;
+        if (p->vma_for_mmap[i].perm & PROT_READ) {
+          perm |= PTE_R;
+        }
+        if (p->vma_for_mmap[i].perm & PROT_WRITE) {
+          perm |= PTE_W;
+        }
+
+        mem = kalloc();
+        memset(mem, 0, PGSIZE);
+        struct file* f = p->vma_for_mmap[i].file;
+        // read the file content to the va
+        if (mappages(p->pagetable, fault_addr, PGSIZE, (uint64)mem, perm) != 0) {
+          kfree(mem);
+          exit(-1);
+        }
+        ilock(f->ip);
+        readi(f->ip, 1, fault_addr, off, PGSIZE);
+        iunlock(f->ip);
+        break;
+      }
+    }
+
   } else {
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());

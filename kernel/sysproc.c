@@ -95,3 +95,47 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+
+// lab mmap
+uint64
+sys_mmap(void)
+{
+  uint len;
+  int prot, flags, fd, offset;
+  if (argint(1, (int*)&len) < 0 ||
+      argint(2, &prot) < 0      ||
+      argint(3, &flags) < 0     ||
+      argint(4, &fd) < 0        ||
+      argint(5, &offset) < 0) 
+  {
+    return -1;
+  }
+  // increase the va, but don't allocate pa
+  struct proc* p = myproc();
+  uint64 start_addr = p->sz;
+  while (len > 0) {
+    p->sz += PGSIZE;
+    len -= PGSIZE;
+  }
+
+  // increase the ref of the file
+  struct file* f = filedup(p->ofile[fd]);
+  struct vma_for_mmap vma_for_mmap = {
+    start_addr,
+    p->sz - PGSIZE,
+    len,
+    prot,
+    f,
+    offset
+  };
+  p->vma_for_mmap[p->mmap_cnt] = vma_for_mmap;
+  p->mmap_cnt += 1;
+  return start_addr;
+}
+
+uint64
+sys_munmap(void)
+{
+  return -1;
+}
