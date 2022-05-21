@@ -5,6 +5,7 @@
 #include "spinlock.h"
 #include "proc.h"
 #include "defs.h"
+#include "fcntl.h"
 
 struct cpu cpus[NCPU];
 
@@ -356,7 +357,20 @@ exit(int status)
       p->ofile[fd] = 0;
     }
   }
-
+  // lab mmap
+  // Unmap all mapped regions
+  for (int i = 0; i < p->mmap_cnt; i++) {
+    uint64 addr = p->vma_for_mmap[i].start_addr;
+    int cnt = 0;
+    for (; addr < p->vma_for_mmap[i].end_addr; addr += PGSIZE) {
+      cnt++;
+    }
+    if (p->vma_for_mmap[i].flags & MAP_SHARED) {
+      // update the related file in disk
+      filewrite(p->vma_for_mmap[i].file, p->vma_for_mmap[i].start_addr, cnt * PGSIZE);
+    }
+    uvmunmap(p->pagetable, p->vma_for_mmap[i].start_addr, cnt, 0);
+  }
   begin_op();
   iput(p->cwd);
   end_op();

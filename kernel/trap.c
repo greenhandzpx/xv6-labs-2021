@@ -76,7 +76,7 @@ usertrap(void)
     // lab mmap
 
     // lazy allocation for mmap
-    printf("lazy mmap\n");
+    // printf("lazy mmap\n");
     struct proc* p = myproc();
     uint64 fault_addr = r_stval();
     char* mem;
@@ -88,7 +88,7 @@ usertrap(void)
         // the fault addr is between the lower bound and the upper bound
         int off = (int)(fault_addr - start_addr) - p->vma_for_mmap[i].off;
         // get the permisson(not sure)
-        int perm = PTE_U | PTE_X;
+        int perm = PTE_U;
         if (p->vma_for_mmap[i].perm & PROT_READ) {
           perm |= PTE_R;
         }

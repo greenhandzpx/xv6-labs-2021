@@ -89,8 +89,10 @@ struct vma_for_mmap {
   uint64 end_addr;
   uint len;
   int perm;
-  struct file* file;
+  int flags;
   int off;
+  struct file* file;
+
 };
 
 #define MMAP_SIZE 16
