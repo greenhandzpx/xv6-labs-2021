@@ -96,7 +96,10 @@ usertrap(void)
           perm |= PTE_W;
         }
 
-        mem = kalloc();
+        if ((mem = kalloc()) == 0) {
+          printf("no enough mem for mapped file");
+          exit(-1);
+        }
         memset(mem, 0, PGSIZE);
         struct file* f = p->vma_for_mmap[i].file;
         // read the file content to the va
@@ -107,11 +110,13 @@ usertrap(void)
         ilock(f->ip);
         readi(f->ip, 1, fault_addr, off, PGSIZE);
         iunlock(f->ip);
-        break;
+        goto normal;
       }
     }
+    goto err;
 
   } else {
+err:
     printf("usertrap(): unexpected scause %p pid=%d\n", r_scause(), p->pid);
     printf("            sepc=%p stval=%p\n", r_sepc(), r_stval());
     p->killed = 1;
@@ -120,6 +125,7 @@ usertrap(void)
   if(p->killed)
     exit(-1);
 
+normal:
   // give up the CPU if this is a timer interrupt.
   if(which_dev == 2)
     yield();

@@ -7,6 +7,11 @@
 #include "defs.h"
 #include "fcntl.h"
 
+// lab mmap
+#include "sleeplock.h"
+#include "fs.h"
+#include "file.h"
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -305,6 +310,15 @@ fork(void)
     if(p->ofile[i])
       np->ofile[i] = filedup(p->ofile[i]);
   np->cwd = idup(p->cwd);
+
+  // lab mmap
+  // copy all the mapped regions to the child
+  for (i = 0; i < MMAP_SIZE; i++) {
+    if (p->vma_for_mmap[i].file && p->vma_for_mmap[i].file->type != FD_NONE) {
+      np->vma_for_mmap[i] = p->vma_for_mmap[i];
+      filedup(np->vma_for_mmap[i].file);
+    } 
+  }
 
   safestrcpy(np->name, p->name, sizeof(p->name));
 

@@ -120,10 +120,10 @@ sys_mmap(void)
   }
   
   struct proc* p = myproc();
-  acquire(&p->lock);
+  // acquire(&p->lock);
   struct file* f = filedup(p->ofile[fd]);
   if (f->writable==0 && flags & MAP_SHARED && (prot & PROT_WRITE)) {
-    release(&p->lock);
+    // release(&p->lock);
     return -1;
   }
   // if (f->readable==0 && (prot & PROT_READ)) {
@@ -149,7 +149,7 @@ sys_mmap(void)
   };
   p->vma_for_mmap[p->mmap_cnt] = vma_for_mmap;
   p->mmap_cnt += 1;
-  release(&p->lock);
+  // release(&p->lock);
   return start_addr;
 }
 
@@ -206,6 +206,7 @@ sys_munmap(void)
       if (p->vma_for_mmap[i].start_addr > p->vma_for_mmap[i].end_addr) {
         // all the pages have been unmap
         fileclose(p->vma_for_mmap[i].file);
+        p->mmap_cnt--;
       }
       // release(&p->lock);
       return 0;
